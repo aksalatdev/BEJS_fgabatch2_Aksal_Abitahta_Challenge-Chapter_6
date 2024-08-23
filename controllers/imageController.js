@@ -1,0 +1,58 @@
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const imagekit = require('../config/imagekit');
+
+// upload gambar
+exports.uploadImage = async (req, res) => {
+    try {
+        const { title, description } = req.body;
+        const file = req.file;
+
+        // Periksa apakah file ada
+        if (!file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+// console.log('File received:', file);
+//         console.log('File path:', file.path);
+//     console.log('File buffer:', file.buffer);
+
+
+        // upload gambar ke imagekit.io
+        const uploadResponse = await imagekit.upload({
+            file: file.buffer,
+            fileName: file.originalname,
+            folder: '/uploads'
+        });
+        //  console.log('ImageKit response:', uploadResponse);
+
+        // simpan data gambar ke database
+        const image = await prisma.image.create({
+            data: {
+                title: title,
+                description: description,
+                imageUrl: uploadResponse.url,
+            }
+        });
+
+        res.status(201).json({
+            message: 'Upload file sukses',
+            image 
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            error: "Upload file gagal",
+            details: error.message
+        });
+    }
+};
+
+// Lihat daftar gambar
+exports.getAllImages = async (req, res) => {
+  try {
+    const images = await prisma.image.findMany();
+    res.json(images);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch images' });
+  }
+};
