@@ -21,22 +21,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Use .env.production
+      - name: Create .env file
         run: |
-          cp .env.production .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
+          echo "NODE_ENV=production" >> .env
+          echo "IMAGEKIT_PUBLIC_KEY=${{ secrets.IMAGEKIT_PUBLIC_KEY }}" >> .env
+          echo "IMAGEKIT_SECRET_KEY=${{ secrets.IMAGEKIT_SECRET_KEY }}" >> .env
+          echo "IMAGEKIT_URL_ENDPOINT=${{ secrets.IMAGEKIT_URL_ENDPOINT }}" >> .env
 
       - name: Generate Prisma client
-        env:
-          NODE_ENV: production
         run: npx prisma generate
 
       - name: Run Prisma migrations
-        env:
-          NODE_ENV: production
         run: npx prisma migrate deploy
 
       - name: Deploy to Railway
         env:
-          NODE_ENV: production
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: npm start
