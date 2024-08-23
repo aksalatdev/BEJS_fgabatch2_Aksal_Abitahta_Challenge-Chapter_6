@@ -39,6 +39,3 @@ jobs:
       - name: Deploy to Railway
         run: |
           railway up --service harmonious-benevolence
-
-      - name: Setup database
-        run: railway run --service harmonious-benevolence npx prisma migrate deploy
