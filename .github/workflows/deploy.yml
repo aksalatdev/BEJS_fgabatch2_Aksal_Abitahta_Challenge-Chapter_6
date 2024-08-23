@@ -21,26 +21,22 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Create .env.production file
+      - name: Use .env.production
         run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_PUBLIC_URL }}" > .env.production
+          cp .env.production .env
 
       - name: Generate Prisma client
         env:
           NODE_ENV: production
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma generate
 
       - name: Run Prisma migrations
         env:
           NODE_ENV: production
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate deploy
 
       - name: Deploy to Railway
         env:
           NODE_ENV: production
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: |
-          npm start
+        run: npm start
