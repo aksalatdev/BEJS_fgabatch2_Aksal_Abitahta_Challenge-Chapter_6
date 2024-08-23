@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "dotenv -e .env.production ./bin/www",
+    "start": "./bin/www",
     "start:dev": "dotenv -e .env nodemon ./bin/www"
   },
   "main": "app.js",

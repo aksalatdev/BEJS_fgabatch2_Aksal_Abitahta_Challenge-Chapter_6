@@ -3,21 +3,21 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main # Sesuaikan dengan branch Anda
+      - main # Pastikan ini sesuai dengan branch utama Anda
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }} # Tambahkan DATABASE_URL ke environment
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Use Node 20
-        uses: actions/setup-node@v3 # Gunakan setup-node versi terbaru
+        uses: actions/setup-node@v3
         with:
           node-version: 20.16.0
 
@@ -27,17 +27,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Create .env.production file
-        run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env.production
-          echo "NODE_ENV=production" >> .env.production
-          echo "IMAGEKIT_PUBLIC_KEY=${{ secrets.IMAGEKIT_PUBLIC_KEY }}" >> .env.production
-          echo "IMAGEKIT_SECRET_KEY=${{ secrets.IMAGEKIT_SECRET_KEY }}" >> .env.production
-          echo "IMAGEKIT_URL_ENDPOINT=${{ secrets.IMAGEKIT_URL_ENDPOINT }}" >> .env.production
+      - name: Debug DATABASE_URL
+        run: echo $DATABASE_URL
 
       - name: Deploy to Railway
         run: |
-          railway up --service test-deploy-a
+          railway up --service library-shs-be
 
       - name: Setup database
-        run: railway run --service test-deploy-a npx dotenv -e .env.production prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma migrate deploy
+
+      - name: Start Application
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm start
