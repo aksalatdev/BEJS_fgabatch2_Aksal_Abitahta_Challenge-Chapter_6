@@ -24,7 +24,7 @@ app.use("/users", usersRouter);
 const imagesRouter = require("./routes/imageRoutes");
 
 app.use('/images', imagesRouter);
-router.get('/', imageController.getAllImages);
+app.use('/', imagesRouter);
 
 
 // catch 404 and forward to error handler
