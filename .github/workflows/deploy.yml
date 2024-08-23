@@ -40,4 +40,4 @@ jobs:
           railway up --service test-deploy-a
 
       - name: Setup database
-        run: railway run --service test-deploy-a npx prisma migrate deploy --env-file .env.production
+        run: railway run --service test-deploy-a npx dotenv -e .env.production prisma migrate deploy
