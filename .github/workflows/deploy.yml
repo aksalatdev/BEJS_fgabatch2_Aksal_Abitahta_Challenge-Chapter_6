@@ -21,21 +21,28 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Create .env file
+      - name: Verify DATABASE_URL
+        run: echo $DATABASE_URL
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Create .env.production file
         run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
-          echo "NODE_ENV=production" >> .env
-          echo "IMAGEKIT_PUBLIC_KEY=${{ secrets.IMAGEKIT_PUBLIC_KEY }}" >> .env
-          echo "IMAGEKIT_SECRET_KEY=${{ secrets.IMAGEKIT_SECRET_KEY }}" >> .env
-          echo "IMAGEKIT_URL_ENDPOINT=${{ secrets.IMAGEKIT_URL_ENDPOINT }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env.production
+          echo "NODE_ENV=production" >> .env.production
 
       - name: Generate Prisma client
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma generate
 
       - name: Run Prisma migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate deploy
 
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm start
