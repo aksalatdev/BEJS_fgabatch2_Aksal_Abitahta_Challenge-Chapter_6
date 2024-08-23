@@ -4,7 +4,7 @@ const path = require("node:path");
 // setting penyimpanan multer
 const storage = multer.memoryStorage({
 	destination: (req, file, cb) => {
-		cb(null, "uploads/"); // direktori penyimpanan upload  fileess
+		cb(null, "uploads/"); // direktori penyimpanan upload  fileesssdaassd
 	},
 	filename: (req, file, cb) => {
 		cb(null, Date.now() + path.extname(file.originalname)); // nama file yang di upload + tanggal
