@@ -3,7 +3,7 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main
+      - main # Pastikan ini sesuai dengan branch utama Anda
 
 jobs:
   deploy:
@@ -30,11 +30,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug Environment Variables
+        run: |
+          echo "IMAGEKIT_PUBLIC_KEY: $IMAGEKIT_PUBLIC_KEY"
+          echo "IMAGEKIT_SECRET_KEY: $IMAGEKIT_SECRET_KEY"
+          echo "IMAGEKIT_URL_ENDPOINT: $IMAGEKIT_URL_ENDPOINT"
+
       - name: Deploy to Railway
         run: |
-          railway login
-          railway link
-          railway up --service harmonious-benevolence --debug
+          railway up --service harmonious-benevolence
 
       - name: Setup database
-        run: npx prisma migrate deploy
+        run: railway run --service harmonious-benevolence npx prisma migrate deploy
