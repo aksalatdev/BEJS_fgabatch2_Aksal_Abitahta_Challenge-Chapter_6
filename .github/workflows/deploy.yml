@@ -32,7 +32,7 @@ jobs:
 
       - name: Deploy to Railway
         run: |
-          railway up --service test-deploy-a
+          railway up --service harmonious-benevolence
 
       - name: Setup database
         env:
