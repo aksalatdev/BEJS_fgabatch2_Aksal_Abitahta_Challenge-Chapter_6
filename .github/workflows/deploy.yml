@@ -22,16 +22,19 @@ jobs:
         run: npm install
 
       - name: Generate Prisma client
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma generate
 
       - name: Run Prisma migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate deploy
 
       - name: Deploy to Railway
-        run: echo $DATABASE_URL
         env:
           NODE_ENV: production
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        # run: |
-        #   npm start
+        run: |
+          npm start
