@@ -11,6 +11,9 @@ jobs:
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      IMAGEKIT_PUBLIC_KEY: ${{ secrets.IMAGEKIT_PUBLIC_KEY }}
+      IMAGEKIT_SECRET_KEY: ${{ secrets.IMAGEKIT_SECRET_KEY }}
+      IMAGEKIT_URL_ENDPOINT: ${{ secrets.IMAGEKIT_URL_ENDPOINT }}
 
     steps:
       - name: Checkout code
@@ -27,19 +30,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Debug DATABASE_URL
-        run: echo $DATABASE_URL
+      - name: Debug Environment Variables
+        run: |
+          echo "IMAGEKIT_PUBLIC_KEY: $IMAGEKIT_PUBLIC_KEY"
+          echo "IMAGEKIT_SECRET_KEY: $IMAGEKIT_SECRET_KEY"
+          echo "IMAGEKIT_URL_ENDPOINT: $IMAGEKIT_URL_ENDPOINT"
 
       - name: Deploy to Railway
         run: |
-          railway up --service harmonious-benevolence
+          railway up --service library-shs-be
 
       - name: Setup database
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate deploy
 
       - name: Start Application
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm start
