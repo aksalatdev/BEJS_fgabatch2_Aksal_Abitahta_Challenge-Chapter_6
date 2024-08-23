@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const upload = require('../config/multer');
-const imageController = require('../controllers/imageController');
+const upload = require("../config/multer");
+const imageController = require("../controllers/imageController");
 
-// Definisikan rute dan hubungkan ke controller
-router.post('/upload', upload.single('image'), imageController.uploadImage);
-router.get('/', imageController.getAllImages);
+// Definisikan rute dan hubungkan ke controllerr
+router.post("/upload", upload.single("image"), imageController.uploadImage);
+router.get("/", imageController.getAllImages);
 
 module.exports = router;
