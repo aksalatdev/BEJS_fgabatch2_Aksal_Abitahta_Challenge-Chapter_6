@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start:dev": "dotenv -e .env nodemon ./bin/www",
-    "start": "dotenv -e .env.production ./bin/www"
+    "start": "dotenv -e .env.production ./bin/www",
+    "start:dev": "dotenv -e .env nodemon ./bin/www"
   },
   "main": "app.js",
   "engines": {
