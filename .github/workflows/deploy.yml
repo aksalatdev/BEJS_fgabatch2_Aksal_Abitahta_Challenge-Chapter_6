@@ -3,46 +3,41 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main
+      - main # Sesuaikan dengan branch Anda
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }} # Tambahkan DATABASE_URL ke environment
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Use Node 20
+        uses: actions/setup-node@v3 # Gunakan setup-node versi terbaru
         with:
-          node-version: "16.13"
+          node-version: 20.16.0
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
 
       - name: Install dependencies
         run: npm install
-
-      - name: Verify DATABASE_URL
-        run: echo $DATABASE_URL
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Create .env.production file
         run: |
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env.production
           echo "NODE_ENV=production" >> .env.production
-
-      - name: Generate Prisma client
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npx prisma generate
-
-      - name: Run Prisma migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npx prisma migrate deploy
+          echo "IMAGEKIT_PUBLIC_KEY=${{ secrets.IMAGEKIT_PUBLIC_KEY }}" >> .env.production
+          echo "IMAGEKIT_SECRET_KEY=${{ secrets.IMAGEKIT_SECRET_KEY }}" >> .env.production
+          echo "IMAGEKIT_URL_ENDPOINT=${{ secrets.IMAGEKIT_URL_ENDPOINT }}" >> .env.production
 
       - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npm start
+        run: |
+          railway up --service test-deploy-a
+
+      - name: Setup database
+        run: railway run --service test-deploy-a npx prisma migrate deploy --env-file .env.production
