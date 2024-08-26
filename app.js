@@ -23,8 +23,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 const imagesRouter = require("./routes/imageRoutes");
-app.use("/images", imagesRouter);
-app.use("/images", imagesRouter);
+app.use("/", imagesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
