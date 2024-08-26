@@ -21,11 +21,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+
 const imagesRouter = require("./routes/imageRoutes");
-
-app.use('/images', imagesRouter);
-app.use('/', imagesRouter);
-
+app.use("/images", imagesRouter);
+app.use("/images", imagesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
