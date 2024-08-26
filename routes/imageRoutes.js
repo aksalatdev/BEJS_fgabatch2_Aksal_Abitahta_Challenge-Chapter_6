@@ -5,6 +5,6 @@ const imageController = require("../controllers/imageController");
 
 // Definisikan rute dan hubungkan ke controllerrrrrrssdd
 router.post("/upload", upload.single("image"), imageController.uploadImage);
-router.get("/", imageController.getAllImages);
+router.get("/getallimages", imageController.getAllImages);
 
 module.exports = router;
