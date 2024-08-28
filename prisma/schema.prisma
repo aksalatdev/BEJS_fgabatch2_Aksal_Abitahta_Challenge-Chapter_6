@@ -14,8 +14,12 @@ datasource db {
 }
 
 model Image {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   imageUrl    String
+  uploadDate  DateTime @default(now())
+  dimensions  String?
+  fileSize    Int?
+  fileType    String?
 }
