@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www && npx prisma migrate",
-    "start:dev": "dotenv -e .env nodemon ./bin/www"
+    "start:dev": "dotenv -e .env.development nodemon ./bin/www"
   },
   "main": "app.js",
   "engines": {
