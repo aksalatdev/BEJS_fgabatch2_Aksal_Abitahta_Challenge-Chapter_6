@@ -30,6 +30,10 @@ exports.uploadImage = async (req, res) => {
 				title: title,
 				description: description,
 				imageUrl: uploadResponse.url,
+				uploadDate: new Date(),
+				dimensions: `${uploadResponse.width}x${uploadResponse.height}`,
+				fileSize: Math.round(uploadResponse.size / 1024), // in KB
+				fileType: uploadResponse.fileType,
 			},
 		});
 
@@ -48,7 +52,14 @@ exports.uploadImage = async (req, res) => {
 // Lihat daftar gambar
 exports.getAllImages = async (req, res) => {
 	try {
-		const images = await prisma.image.findMany();
+		const images = await prisma.image.findMany({
+			select: {
+				id: true,
+				title: true,
+				description: true,
+				imageUrl: true,
+			},
+		});
 		res.json(images);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to fetch images" });
