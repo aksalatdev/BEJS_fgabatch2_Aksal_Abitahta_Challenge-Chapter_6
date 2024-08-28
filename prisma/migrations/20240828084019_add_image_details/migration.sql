@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Image" ADD COLUMN     "dimensions" TEXT,
+ADD COLUMN     "fileSize" INTEGER,
+ADD COLUMN     "fileType" TEXT,
+ADD COLUMN     "uploadDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
