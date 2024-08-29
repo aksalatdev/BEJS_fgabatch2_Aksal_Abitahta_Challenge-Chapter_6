@@ -91,6 +91,7 @@ exports.deleteImage = async (req, res) => {
 		await prisma.image.delete({
 			where: { id: Number(id) },
 		});
+		res.status(200).json({ message: "Gambar Berhasil Dihapus" });
 	} catch (error) {
 		res.status(500).json({ error: "Gagal Menghapus Gambar" });
 	}
