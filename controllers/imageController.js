@@ -95,3 +95,19 @@ exports.deleteImage = async (req, res) => {
 		res.status(500).json({ error: "Gagal Menghapus Gambar" });
 	}
 };
+
+// Update Image
+exports.updateImage = async (req, res) => {
+	const { id } = req.params;
+	const { title, description } = req.body;
+
+	try {
+		const updatedImage = await prisma.image.update({
+			where: { id: Number(id) },
+			data: { title, description },
+		});
+		res.status(200).json(updatedImage);
+	} catch (error) {
+		res.status(500).json({ error: "Gagal mengupdate gambar" });
+	}
+};
