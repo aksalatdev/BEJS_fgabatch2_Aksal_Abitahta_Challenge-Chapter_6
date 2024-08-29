@@ -82,3 +82,16 @@ exports.getImageDetails = async (req, res) => {
 		res.status(500).json({ error: "Gagal Mengambil Detail Gambar" });
 	}
 };
+
+// Delete image
+exports.deleteImage = async (req, res) => {
+	const { id } = req.params;
+
+	try {
+		await prisma.image.delete({
+			where: { id: Number(id) },
+		});
+	} catch (error) {
+		res.status(500).json({ error: "Gagal Menghapus Gambar" });
+	}
+};
