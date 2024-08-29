@@ -32,7 +32,7 @@ exports.uploadImage = async (req, res) => {
 				imageUrl: uploadResponse.url,
 				uploadDate: new Date(),
 				dimensions: `width: ${uploadResponse.width} px, height: ${uploadResponse.height} px`,
-				fileSize: `${Math.round(uploadResponse.size / 1024)} KB`, // in KB
+				fileSize: Math.round(req.file.size / 1024), // in KB
 				fileType: uploadResponse.fileType,
 			},
 		});
